@@ -94,4 +94,29 @@ router.post('/articulos', (req, res) => {
     })
 })
 
+router.post('/clientes', (req, res) => {
+    const connection = mysql.createConnection(dbConfig);
+    let cliente = req.body;
+    clienteArray = [
+        cliente.idClienteDNI,
+        cliente.nombre,
+        cliente.apellido,
+        cliente.telefono,
+        cliente.email,
+        cliente.direccion
+    ];
+    connection.connect(function (error, result) {
+        if (error) {
+            throw error;
+        } else {
+            connection.query('INSERT INTO clientes VALUES (?, ?, ?, ?, ?, ?)', clienteArray,
+            function (err, result) {
+                if (err) throw err;
+                res.send(result).toString();
+                console.log(result);
+            })
+        }
+    })
+})
+
 module.exports = router;
