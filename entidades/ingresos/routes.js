@@ -8,27 +8,9 @@ const { status } = require('express/lib/response');
 router.use(bodyParser.urlencoded({extended: false}));
 router.use(bodyParser.json());
 
-router.get('/', (req, res) => {
-    res.json("Ruta inicio de ingresos");
-});
-
-router.get('/consulta', (req, res) => {
-    const connection = mysql.createConnection(dbConfig);
-    connection.connect(function (error, result) {
-        if (error) {
-            throw error;
-        } else {
-            connection.query('SELECT * FROM marcas', function (err, result) {
-                if (err) throw err;
-                res.send(result).toString();
-            })
-        }
-    })
-});
-
-router.get('/consulta2', (req, res) => {
-    res.json({ingresos: ["ingresos3", "ingresos4"]});
-});
+// router.get('/', (req, res) => {
+//     res.json("Ruta inicio de ingresos");
+// });
 
 router.post('/marcas', (req, res) => {
     const connection = mysql.createConnection(dbConfig);
@@ -46,6 +28,70 @@ router.post('/marcas', (req, res) => {
        
     })
     
+});
+
+router.post('/talles', (req, res) => {
+    const connection = mysql.createConnection(dbConfig);
+    let talle = req.body.talle;
+    connection.connect(function (error, result) {
+        if (error) {
+            throw error;
+        } else {
+            connection.query('INSERT INTO talles (descripcion) VALUE (?)', [talle], function (err, result) {
+                if (err) throw err;
+                res.send(result).toString();
+            })
+        }
+    })
+})
+
+router.post('/proveedores', (req, res) => {
+    const connection = mysql.createConnection(dbConfig);
+    let proveedor = req.body;
+    let proveedorArray = [
+        proveedor.nombre,
+        proveedor.telefono,
+        proveedor.email
+    ];
+    connection.connect(function (error, result) {
+        if (error) {
+            throw error;
+        } else {
+            connection.query('INSERT INTO proveedores (nombre, telefono, email) VALUES (?, ?, ?)', proveedorArray, 
+            function (err, result) {
+                if (err) throw err;
+                res.send(result).toString();
+                console.log(proveedorArray);
+            })
+        }
+    })
+})
+
+router.post('/articulos', (req, res) => {
+    const connection = mysql.createConnection(dbConfig);
+    let articulo = req.body;
+    let articuloArray = [
+        articulo.idArticulo,
+        articulo.idMarca,
+        articulo.idTalle,
+        articulo.idCategoria,
+        articulo.idProveedor,
+        articulo.precio,
+        articulo.costo,
+        articulo.cantidad
+    ];
+    connection.connect(function (error, result) {
+        if (error) {
+            throw error;
+        } else {
+            connection.query(`INSERT INTO articulos VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, articuloArray,
+            function (err, result) {
+                if (err) throw err;
+                res.send(result).toString();
+                console.log(result);
+            })
+        }
+    })
 })
 
 module.exports = router;
