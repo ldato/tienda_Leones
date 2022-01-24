@@ -60,3 +60,8 @@ PRIMARY KEY (idVenta, idArticulo),
 FOREIGN KEY (idVenta) REFERENCES Ventas (idVenta),
 FOREIGN KEY (idArticulo) REFERENCES Articulos (idArticulo)
 );
+
+/*SE AGREGAN 2 CAMPOS A LA TABLA ventasxarticulos*/
+ALTER TABLE ventasxarticulo ADD precioUnit FLOAT NOT NULL AFTER cantidad;
+
+ALTER TABLE ventasxarticulo ADD totalArt FLOAT NOT NULL AFTER precioUnit;
