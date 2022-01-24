@@ -33,9 +33,9 @@ router.post("/venta", (req, res) => {
     const connection = mysql.createConnection(dbConfig);
     //let venta = req.body;
     //variables para prueba
-    let venta = [{articulo: "ASD123", cantidad:2}, {articulo:"DSA321", cantidad:1}]
+    let venta = [{articulo: "ASD123", cantidad:2, precio: 300}, {articulo:"DSA321", cantidad:1, precio: 500}]
     let clienteDNI = 12345678;
-    let total = 1000; 
+    let total = 1100; 
     let resultQuery = {};
     
      connection.connect(async function (error, result) {
@@ -49,8 +49,9 @@ router.post("/venta", (req, res) => {
                  res.send(resultQuery).toString();
                  console.log(resultQuery);
                  for (let i = 0; i < venta.length; i++) {
-                     connection.query('INSERT INTO ventasxarticulo VALUES (?, ?, ?)',
-                     [resultQuery.insertId, venta[i].articulo, venta[i].cantidad], async function (error, result) {
+                     let totalArt = (venta[i].precio * venta[i].cantidad);
+                     connection.query('INSERT INTO ventasxarticulo VALUES (?, ?, ?, ?, ?)',
+                     [resultQuery.insertId, venta[i].articulo, venta[i].cantidad, venta[i].precio, totalArt], async function (error, result) {
                          if (error) throw error;
                          await result;
                           //res.send(result).toString();
