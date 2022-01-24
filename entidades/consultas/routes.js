@@ -40,8 +40,27 @@ router.get('/marcasXid/:id', (req, res) => {
     })
 });
 
-router.get('/ventas2', (req, res) => {
-    res.json({ventas: ["venta3", "venta4"]});
-})
+router.get('/ventasxcliente/:id', (req, res) => {
+    let id = req.params.id;
+    const connection = mysql.createConnection(dbConfig);
+    connection.connect(function (error, result) {
+        if (error) {
+            throw error;
+        } else {
+            connection.query(`SELECT c.nombre, c.apellido, ca.descripcion, m.nombre AS marca, 
+            vxa.cantidad, vxa.precioUnit, vxa.totalArt, v.fecha  FROM clientes c 
+            JOIN ventas v ON c.idClienteDNI = v.idCliente
+            JOIN ventasxarticulo vxa ON v.idVenta = vxa.idVenta
+            JOIN articulos a ON vxa.idArticulo = a.idArticulo
+            JOIN categorias ca ON a.idCategoria = ca.idCategoria
+            JOIN marcas m ON a.idMarca = m.idMarca
+            WHERE c.idClienteDNI = ?`, [id], function (err, result) {
+                if (err) throw err;
+                res.send(result).toString();
+                console.log(result);
+            })
+        }
+    })
+});
 
 module.exports = router;
