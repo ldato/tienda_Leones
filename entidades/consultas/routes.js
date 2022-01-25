@@ -40,6 +40,27 @@ router.get('/marcasXid/:id', (req, res) => {
     })
 });
 
+router.get('/articulosxid/:id', (req, res) => {
+    let id = req.params.id;
+    const connection = mysql.createConnection(dbConfig);
+    connection.connect(function (error, result) {
+        if (error) {
+            throw error;
+        } else {
+            connection.query(`SELECT idArticulo, cat.descripcion, nombre AS marca, 
+            tal.descripcion AS talle, precio, cantidad FROM articulos art
+            JOIN categorias cat ON cat.idCategoria = art.idCategoria
+            JOIN marcas mar ON art.idMarca = mar.idMarca
+            JOIN talles tal ON tal.idTalle = art.idTalle
+            WHERE art.idArticulo = ?;`, [id], function (err, result) {
+                if (err) throw err;
+                res.send(result).toString();
+                console.log(result);
+            })
+        }
+    })
+})
+
 router.get('/ventasxcliente/:id', (req, res) => {
     let id = req.params.id;
     const connection = mysql.createConnection(dbConfig);
