@@ -31,12 +31,14 @@ router.use(bodyParser.json());
 
 router.post("/venta", (req, res) => {
     const connection = mysql.createConnection(dbConfig);
-    //let venta = req.body;
+    let venta = req.body.venta;
     //variables para prueba
-    let venta = [{articulo: "ASD123", cantidad:2, precio: 300}, {articulo:"DSA321", cantidad:1, precio: 500}]
-    let clienteDNI = 12345678;
-    let total = 1100; 
+    //let venta = [{articulo: "ASD123", cantidad:2, precio: 300}, {articulo:"DSA321", cantidad:1, precio: 500}]
+    let clienteDNI = req.body.clienteDNI;
+    let total = req.body.total;
     let resultQuery = {};
+    const date = new Date();
+    let fecha = date.getDate();
     
      connection.connect(async function (error, result) {
          if (error) {
@@ -49,13 +51,13 @@ router.post("/venta", (req, res) => {
                  res.send(resultQuery).toString();
                  console.log(resultQuery);
                  for (let i = 0; i < venta.length; i++) {
-                     let totalArt = (venta[i].precio * venta[i].cantidad);
+                     let totalArt = (venta[i][0].precio * venta[i][0].cantidad);
                      connection.query('INSERT INTO ventasxarticulo VALUES (?, ?, ?, ?, ?)',
-                     [resultQuery.insertId, venta[i].articulo, venta[i].cantidad, venta[i].precio, totalArt], async function (error, result) {
+                     [resultQuery.insertId, venta[i][0].idArticulo, venta[i][0].cantidad, venta[i][0].precio, totalArt], async function (error, result) {
                          if (error) throw error;
                          await result;
                           //res.send(result).toString();
-                          //console.log(result);
+                          console.log(result);
                      } )
                      
                  }

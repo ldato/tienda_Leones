@@ -84,4 +84,22 @@ router.get('/ventasxcliente/:id', (req, res) => {
     })
 });
 
+router.get('/cliente/:id', (req, res) => {
+    let id = req.params.id;
+    const connection = mysql.createConnection(dbConfig);
+    connection.connect(function (error, result) {
+        if (error) {
+            throw error;
+        } else {
+            connection.query("SELECT * FROM tienda_leones.clientes WHERE idClienteDNI = ?;", [id],
+            function (error, result) {
+                if (error) throw error;
+                res.send(result).toString();
+                console.log(result);
+            })
+        }
+        
+    })
+})
+
 module.exports = router;
