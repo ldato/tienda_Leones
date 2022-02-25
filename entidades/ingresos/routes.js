@@ -16,13 +16,20 @@ router.post('/marcas', (req, res) => {
     const connection = mysql.createConnection(dbConfig);
     let marca = req.body.nombre;
     //let marca = "HoziShoes";
+    let status;
     connection.connect (function (error, result) {
         if (error) {
             throw error;
         } else {
             connection.query('INSERT INTO marcas (nombre) VALUES (?)', [marca], function (err, result) {
+                // if (err) throw err;
+                // console.log("Response");
+                // console.log(res);
+                // res.send(result).toString();
                 if (err) throw err;
-                res.send(result).toString();
+                status = (res.statusCode).toString();
+                res.send(status).toString();
+                console.log(result);
             });
         };
        
@@ -32,14 +39,37 @@ router.post('/marcas', (req, res) => {
 
 router.post('/talles', (req, res) => {
     const connection = mysql.createConnection(dbConfig);
-    let talle = req.body.talle;
+    let talle = req.body.descripcion;
+    let status;
     connection.connect(function (error, result) {
         if (error) {
             throw error;
         } else {
             connection.query('INSERT INTO talles (descripcion) VALUE (?)', [talle], function (err, result) {
+                // if (err) throw err;
+                // res.send(result).toString();
                 if (err) throw err;
-                res.send(result).toString();
+                status = (res.statusCode).toString();
+                res.send(status).toString();
+                console.log(result);
+            })
+        }
+    })
+})
+
+router.post('/categorias', (req, res) => {
+    const connection = mysql.createConnection(dbConfig);
+    let categoria = req.body.descripcion;
+    let status;
+    connection.connect(function (error, result) {
+        if (error) {
+            throw error;
+        } else {
+            connection.query('INSERT INTO categorias (descripcion) VALUES (?)', [categoria], function (error, result) {
+              if (error) throw error;
+              status = (res.statusCode).toString();
+              res.send(status).toString();
+              console.log(result); 
             })
         }
     })
@@ -94,17 +124,22 @@ router.post('/articulos', (req, res) => {
     })
 })
 
+
 router.post('/clientes', (req, res) => {
     const connection = mysql.createConnection(dbConfig);
     let cliente = req.body;
     clienteArray = [
-        cliente.idClienteDNI,
+        // cliente.idClienteDNI,
+        cliente.dni, //esta linea se agrego para probar el form de registra
         cliente.nombre,
         cliente.apellido,
         cliente.telefono,
         cliente.email,
         cliente.direccion
     ];
+
+    let status;
+
     connection.connect(function (error, result) {
         if (error) {
             throw error;
@@ -112,7 +147,8 @@ router.post('/clientes', (req, res) => {
             connection.query('INSERT INTO clientes VALUES (?, ?, ?, ?, ?, ?)', clienteArray,
             function (err, result) {
                 if (err) throw err;
-                res.send(result).toString();
+                status = (res.statusCode).toString();
+                res.send(status).toString();
                 console.log(result);
             })
         }
