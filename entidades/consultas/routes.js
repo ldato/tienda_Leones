@@ -40,6 +40,48 @@ router.get('/marcasXid/:id', (req, res) => {
     })
 });
 
+router.get('/talles', (req, res) => {
+    const connection = mysql.createConnection(dbConfig);
+    connection.connect(function (error, result) {
+        if (error) {
+            throw error;
+        } else {
+            connection.query('SELECT * FROM tienda_leones.talles', function (err, result) {
+                if (err) throw err;
+                res.send(result);
+            })
+        }
+    })
+})
+
+router.get('/categorias', (req, res) => {
+    const connection = mysql.createConnection(dbConfig);
+    connection.connect(function (error, result) {
+        if (error) {
+            throw error
+        } else {
+            connection.query('SELECT * FROM tienda_leones.categorias', function (err, result) {
+                if (err) throw err;
+                res.send(result);
+            })
+        }
+    })
+})
+
+router.get('/proveedores', (req, res) => {
+    const connection = mysql.createConnection(dbConfig);
+    connection.connect(function (error, result) {
+        if (error) {
+            throw error;
+        } else {
+            connection.query('SELECT * FROM tienda_leones.proveedores', function (err, result) {
+                if (err) throw err;
+                res.send(result);
+            })
+        }
+    })
+})
+
 router.get('/articulosxid/:id', (req, res) => {
     let id = req.params.id;
     const connection = mysql.createConnection(dbConfig);

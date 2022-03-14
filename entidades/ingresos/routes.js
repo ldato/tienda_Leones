@@ -5,7 +5,7 @@ const dbConfig = require('../../dbConfig');
 const bodyParser = require('body-parser');
 const { status } = require('express/lib/response');
 
-router.use(bodyParser.urlencoded({extended: false}));
+router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
 // router.get('/', (req, res) => {
@@ -17,7 +17,7 @@ router.post('/marcas', (req, res) => {
     let marca = req.body.nombre;
     //let marca = "HoziShoes";
     let status;
-    connection.connect (function (error, result) {
+    connection.connect(function (error, result) {
         if (error) {
             throw error;
         } else {
@@ -32,9 +32,9 @@ router.post('/marcas', (req, res) => {
                 console.log(result);
             });
         };
-       
+
     })
-    
+
 });
 
 router.post('/talles', (req, res) => {
@@ -66,10 +66,10 @@ router.post('/categorias', (req, res) => {
             throw error;
         } else {
             connection.query('INSERT INTO categorias (descripcion) VALUES (?)', [categoria], function (error, result) {
-              if (error) throw error;
-              status = (res.statusCode).toString();
-              res.send(status).toString();
-              console.log(result); 
+                if (error) throw error;
+                status = (res.statusCode).toString();
+                res.send(status).toString();
+                console.log(result);
             })
         }
     })
@@ -77,6 +77,7 @@ router.post('/categorias', (req, res) => {
 
 router.post('/proveedores', (req, res) => {
     const connection = mysql.createConnection(dbConfig);
+    let status;
     let proveedor = req.body;
     let proveedorArray = [
         proveedor.nombre,
@@ -87,18 +88,23 @@ router.post('/proveedores', (req, res) => {
         if (error) {
             throw error;
         } else {
-            connection.query('INSERT INTO proveedores (nombre, telefono, email) VALUES (?, ?, ?)', proveedorArray, 
-            function (err, result) {
-                if (err) throw err;
-                res.send(result).toString();
-                console.log(proveedorArray);
-            })
+            connection.query('INSERT INTO proveedores (nombre, telefono, email) VALUES (?, ?, ?)', proveedorArray,
+                function (err, result) {
+                    // if (err) throw err;
+                    // res.send(result).toString();
+                    // console.log(proveedorArray);
+                    if (error) throw error;
+                    status = (res.statusCode).toString();
+                    res.send(status).toString();
+                    console.log(result);
+                })
         }
     })
 })
 
 router.post('/articulos', (req, res) => {
     const connection = mysql.createConnection(dbConfig);
+    let status;
     let articulo = req.body;
     let articuloArray = [
         articulo.idArticulo,
@@ -115,11 +121,12 @@ router.post('/articulos', (req, res) => {
             throw error;
         } else {
             connection.query(`INSERT INTO articulos VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, articuloArray,
-            function (err, result) {
-                if (err) throw err;
-                res.send(result).toString();
-                console.log(result);
-            })
+                function (err, result) {
+                    if (err) throw err;
+                    status = (res.statusCode).toString();
+                    res.send(status).toString();
+                    console.log(result);
+                })
         }
     })
 })
@@ -145,12 +152,12 @@ router.post('/clientes', (req, res) => {
             throw error;
         } else {
             connection.query('INSERT INTO clientes VALUES (?, ?, ?, ?, ?, ?)', clienteArray,
-            function (err, result) {
-                if (err) throw err;
-                status = (res.statusCode).toString();
-                res.send(status).toString();
-                console.log(result);
-            })
+                function (err, result) {
+                    if (err) throw err;
+                    status = (res.statusCode).toString();
+                    res.send(status).toString();
+                    console.log(result);
+                })
         }
     })
 })
